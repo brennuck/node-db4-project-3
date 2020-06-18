@@ -3,6 +3,13 @@ exports.up = function (knex) {
     .createTable("recipes", (tbl) => {
       tbl.increments();
       tbl.string("name", 256).notNullable().index();
+      tbl
+        .integer("step_id")
+        .unsigned()
+        .references("id")
+        .inTable("recipes")
+        .onDelete("RESTRICT")
+        .onUpdate("CASCADE");
     })
     .createTable("ingredients", (tbl) => {
       tbl.increments();
@@ -33,13 +40,6 @@ exports.up = function (knex) {
       tbl.increments();
       tbl.integer("step_numbers").unsigned().notNullable();
       tbl.text("instructions").notNullable();
-      tbl
-        .integer("recipe_id")
-        .unsigned()
-        .references("id")
-        .inTable("recipes")
-        .onDelete("RESTRICT")
-        .onUpdate("CASCADE");
     });
 };
 

@@ -36,8 +36,19 @@ exports.up = function (knex) {
 
       tbl.string("quantity").notNullable().index();
     })
+    .createTable("recipe_instructions", (tbl) => {
+      tbl.increments();
+      tbl.text("instruction").notNullable();
+    })
     .createTable("recipe_steps", (tbl) => {
       tbl.increments();
+      tbl
+        .integer("instruction_number")
+        .unsigned()
+        .references("id")
+        .inTable("recipe_instructions")
+        .onDelete("RESTRICT")
+        .onUpdate("CASCADE");
       tbl.integer("step_numbers").unsigned().notNullable();
       tbl.text("instructions").notNullable();
     });
